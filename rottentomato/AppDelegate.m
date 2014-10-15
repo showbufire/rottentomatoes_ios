@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MovieIndexViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    MovieIndexViewController *vc = [[MovieIndexViewController alloc] init];
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+    self.window.rootViewController = nvc;    
+    
     return YES;
 }
 

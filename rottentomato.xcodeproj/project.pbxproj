@@ -14,6 +14,8 @@
 		814F188C19EE36460009B546 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 814F188B19EE36460009B546 /* Images.xcassets */; };
 		814F188F19EE36460009B546 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 814F188D19EE36460009B546 /* LaunchScreen.xib */; };
 		814F189B19EE36460009B546 /* rottentomatoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 814F189A19EE36460009B546 /* rottentomatoTests.m */; };
+		814F18A719EE368B0009B546 /* MovieIndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 814F18A519EE368B0009B546 /* MovieIndexViewController.m */; };
+		814F18A819EE368B0009B546 /* MovieIndexViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 814F18A619EE368B0009B546 /* MovieIndexViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,9 @@
 		814F189419EE36460009B546 /* rottentomatoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rottentomatoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		814F189919EE36460009B546 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		814F189A19EE36460009B546 /* rottentomatoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rottentomatoTests.m; sourceTree = "<group>"; };
+		814F18A419EE368B0009B546 /* MovieIndexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieIndexViewController.h; sourceTree = "<group>"; };
+		814F18A519EE368B0009B546 /* MovieIndexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieIndexViewController.m; sourceTree = "<group>"; };
+		814F18A619EE368B0009B546 /* MovieIndexViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MovieIndexViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +86,9 @@
 		814F187D19EE36460009B546 /* rottentomato */ = {
 			isa = PBXGroup;
 			children = (
+				814F18A419EE368B0009B546 /* MovieIndexViewController.h */,
+				814F18A519EE368B0009B546 /* MovieIndexViewController.m */,
+				814F18A619EE368B0009B546 /* MovieIndexViewController.xib */,
 				814F188219EE36460009B546 /* AppDelegate.h */,
 				814F188319EE36460009B546 /* AppDelegate.m */,
 				814F188519EE36460009B546 /* ViewController.h */,
@@ -199,6 +207,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				814F18A819EE368B0009B546 /* MovieIndexViewController.xib in Resources */,
 				814F188A19EE36460009B546 /* Main.storyboard in Resources */,
 				814F188F19EE36460009B546 /* LaunchScreen.xib in Resources */,
 				814F188C19EE36460009B546 /* Images.xcassets in Resources */,
@@ -219,6 +228,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				814F18A719EE368B0009B546 /* MovieIndexViewController.m in Sources */,
 				814F188719EE36460009B546 /* ViewController.m in Sources */,
 				814F188419EE36460009B546 /* AppDelegate.m in Sources */,
 				814F188119EE36460009B546 /* main.m in Sources */,
