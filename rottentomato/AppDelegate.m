@@ -20,8 +20,11 @@
     // Override point for customization after application launch.
     MovieIndexViewController *vc = [[MovieIndexViewController alloc] init];
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
     self.window.rootViewController = nvc;
-    
+
+    self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
     return YES;
