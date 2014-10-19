@@ -8,6 +8,7 @@
 
 #import "MovieIndexViewController.h"
 #import "MovieCell.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface MovieIndexViewController ()
 
@@ -63,6 +64,8 @@
     NSDictionary *movie = self.movies[indexPath.row];
     cell.titleLabel.text = movie[@"title"];
     cell.synoposisLabel.text = movie[@"synopsis"];
+    NSString *thumbnailURL = [movie valueForKeyPath:@"posters.thumbnail"];
+    [cell.imgView setImageWithURL:[NSURL URLWithString:thumbnailURL]];
 
     return cell;
 }
