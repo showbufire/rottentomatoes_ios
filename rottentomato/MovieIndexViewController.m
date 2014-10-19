@@ -7,6 +7,7 @@
 //
 
 #import "MovieIndexViewController.h"
+#import "MovieCell.h"
 
 @interface MovieIndexViewController ()
 
@@ -21,7 +22,25 @@
     // Do any additional setup after loading the view from its nib.
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
     self.title = @"Rotten Tomatoes";
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"MovieCell" bundle:nil] forCellReuseIdentifier:@"MovieCell"];
+
+    [self makeAPICall];
+}
+
+- (void)makeAPICall {
+    NSString *apiKey = @"yt2y9kbakprqz9ne9kumm47g";
+    NSString *urlString = [NSString stringWithFormat:@"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=%@", apiKey];
+    NSLog(@"%@", urlString);
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        
+        NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        NSLog(@"response: %@", responseDictionary);
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,8 +56,8 @@
     
     NSLog(@"I'm displaying row: %ld", indexPath.row);
     
-    UITableViewCell *cell = [[UITableViewCell alloc] init];
-    cell.textLabel.text = @"Hello";
+    MovieCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MovieCell"];
+
     return cell;
 }
 

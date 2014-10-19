@@ -16,6 +16,8 @@
 		814F189B19EE36460009B546 /* rottentomatoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 814F189A19EE36460009B546 /* rottentomatoTests.m */; };
 		814F18A719EE368B0009B546 /* MovieIndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 814F18A519EE368B0009B546 /* MovieIndexViewController.m */; };
 		814F18A819EE368B0009B546 /* MovieIndexViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 814F18A619EE368B0009B546 /* MovieIndexViewController.xib */; };
+		814F18AC19EE43AF0009B546 /* MovieCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 814F18AA19EE43AF0009B546 /* MovieCell.m */; };
+		814F18AD19EE43AF0009B546 /* MovieCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 814F18AB19EE43AF0009B546 /* MovieCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +47,9 @@
 		814F18A419EE368B0009B546 /* MovieIndexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieIndexViewController.h; sourceTree = "<group>"; };
 		814F18A519EE368B0009B546 /* MovieIndexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieIndexViewController.m; sourceTree = "<group>"; };
 		814F18A619EE368B0009B546 /* MovieIndexViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MovieIndexViewController.xib; sourceTree = "<group>"; };
+		814F18A919EE43AF0009B546 /* MovieCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieCell.h; sourceTree = "<group>"; };
+		814F18AA19EE43AF0009B546 /* MovieCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieCell.m; sourceTree = "<group>"; };
+		814F18AB19EE43AF0009B546 /* MovieCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MovieCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +93,9 @@
 			children = (
 				814F18A419EE368B0009B546 /* MovieIndexViewController.h */,
 				814F18A519EE368B0009B546 /* MovieIndexViewController.m */,
+				814F18A919EE43AF0009B546 /* MovieCell.h */,
+				814F18AA19EE43AF0009B546 /* MovieCell.m */,
+				814F18AB19EE43AF0009B546 /* MovieCell.xib */,
 				814F18A619EE368B0009B546 /* MovieIndexViewController.xib */,
 				814F188219EE36460009B546 /* AppDelegate.h */,
 				814F188319EE36460009B546 /* AppDelegate.m */,
@@ -211,6 +219,7 @@
 				814F188A19EE36460009B546 /* Main.storyboard in Resources */,
 				814F188F19EE36460009B546 /* LaunchScreen.xib in Resources */,
 				814F188C19EE36460009B546 /* Images.xcassets in Resources */,
+				814F18AD19EE43AF0009B546 /* MovieCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				814F18A719EE368B0009B546 /* MovieIndexViewController.m in Sources */,
+				814F18AC19EE43AF0009B546 /* MovieCell.m in Sources */,
 				814F188719EE36460009B546 /* ViewController.m in Sources */,
 				814F188419EE36460009B546 /* AppDelegate.m in Sources */,
 				814F188119EE36460009B546 /* main.m in Sources */,
