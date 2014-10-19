@@ -2,4 +2,5 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 platform :ios, "8.0"
 
-pod "AFNetworking"
+pod 'AFNetworking'
+pod 'SVProgressHUD'

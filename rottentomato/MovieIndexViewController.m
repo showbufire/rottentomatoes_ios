@@ -10,6 +10,7 @@
 #import "MovieCell.h"
 #import "UIImageView+AFNetworking.h"
 #import "MovieDetailsViewController.h"
+#import "SVProgressHUD.h"
 
 @interface MovieIndexViewController ()
 
@@ -29,7 +30,7 @@
     self.title = @"Rotten Tomatoes";
     
     [self.tableView registerNib:[UINib nibWithNibName:@"MovieCell" bundle:nil] forCellReuseIdentifier:@"MovieCell"];
-
+    [SVProgressHUD show];
     [self makeAPICall];
 }
 
@@ -44,6 +45,7 @@
         NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         self.movies = responseDictionary[@"movies"];
         [self.tableView reloadData];
+        [SVProgressHUD dismiss];
     }];
 }
 
@@ -53,14 +55,10 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"%lu\n", [self.movies count]);
     return [self.movies count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSLog(@"I'm displaying row: %ld", indexPath.row);
-    
     MovieCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MovieCell"];
     NSDictionary *movie = self.movies[indexPath.row];
     cell.titleLabel.text = movie[@"title"];
