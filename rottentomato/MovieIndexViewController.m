@@ -9,6 +9,7 @@
 #import "MovieIndexViewController.h"
 #import "MovieCell.h"
 #import "UIImageView+AFNetworking.h"
+#import "MovieDetailsViewController.h"
 
 @interface MovieIndexViewController ()
 
@@ -68,6 +69,13 @@
     [cell.imgView setImageWithURL:[NSURL URLWithString:thumbnailURL]];
 
     return cell;
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    MovieDetailsViewController *dvc = [[MovieDetailsViewController alloc] init];
+    [self.navigationController pushViewController:dvc animated:YES];
 }
 
 /*
