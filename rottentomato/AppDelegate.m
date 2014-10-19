@@ -20,7 +20,9 @@
     // Override point for customization after application launch.
     MovieIndexViewController *vc = [[MovieIndexViewController alloc] init];
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
-    self.window.rootViewController = nvc;    
+    self.window.rootViewController = nvc;
+    
+    [self.window makeKeyAndVisible];
     
     return YES;
 }

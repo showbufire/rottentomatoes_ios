@@ -12,6 +12,7 @@
 @interface MovieIndexViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) NSArray *movies;
 
 @end
 
@@ -39,7 +40,8 @@
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         
         NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        NSLog(@"response: %@", responseDictionary);
+        self.movies = responseDictionary[@"movies"];
+        [self.tableView reloadData];
     }];
 }
 
@@ -49,7 +51,8 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 100;
+    NSLog(@"%lu\n", [self.movies count]);
+    return [self.movies count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -57,6 +60,9 @@
     NSLog(@"I'm displaying row: %ld", indexPath.row);
     
     MovieCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MovieCell"];
+    NSDictionary *movie = self.movies[indexPath.row];
+    cell.titleLabel.text = movie[@"title"];
+    cell.synoposisLabel.text = movie[@"synopsis"];
 
     return cell;
 }

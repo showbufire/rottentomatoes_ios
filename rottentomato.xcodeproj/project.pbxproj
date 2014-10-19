@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		814F188119EE36460009B546 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 814F188019EE36460009B546 /* main.m */; };
 		814F188419EE36460009B546 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 814F188319EE36460009B546 /* AppDelegate.m */; };
-		814F188719EE36460009B546 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 814F188619EE36460009B546 /* ViewController.m */; };
-		814F188A19EE36460009B546 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 814F188819EE36460009B546 /* Main.storyboard */; };
 		814F188C19EE36460009B546 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 814F188B19EE36460009B546 /* Images.xcassets */; };
 		814F188F19EE36460009B546 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 814F188D19EE36460009B546 /* LaunchScreen.xib */; };
 		814F189B19EE36460009B546 /* rottentomatoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 814F189A19EE36460009B546 /* rottentomatoTests.m */; };
@@ -36,9 +34,6 @@
 		814F188019EE36460009B546 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		814F188219EE36460009B546 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		814F188319EE36460009B546 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		814F188519EE36460009B546 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		814F188619EE36460009B546 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		814F188919EE36460009B546 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		814F188B19EE36460009B546 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		814F188E19EE36460009B546 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		814F189419EE36460009B546 /* rottentomatoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rottentomatoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,9 +94,6 @@
 				814F18A619EE368B0009B546 /* MovieIndexViewController.xib */,
 				814F188219EE36460009B546 /* AppDelegate.h */,
 				814F188319EE36460009B546 /* AppDelegate.m */,
-				814F188519EE36460009B546 /* ViewController.h */,
-				814F188619EE36460009B546 /* ViewController.m */,
-				814F188819EE36460009B546 /* Main.storyboard */,
 				814F188B19EE36460009B546 /* Images.xcassets */,
 				814F188D19EE36460009B546 /* LaunchScreen.xib */,
 				814F187E19EE36460009B546 /* Supporting Files */,
@@ -216,7 +208,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				814F18A819EE368B0009B546 /* MovieIndexViewController.xib in Resources */,
-				814F188A19EE36460009B546 /* Main.storyboard in Resources */,
 				814F188F19EE36460009B546 /* LaunchScreen.xib in Resources */,
 				814F188C19EE36460009B546 /* Images.xcassets in Resources */,
 				814F18AD19EE43AF0009B546 /* MovieCell.xib in Resources */,
@@ -239,7 +230,6 @@
 			files = (
 				814F18A719EE368B0009B546 /* MovieIndexViewController.m in Sources */,
 				814F18AC19EE43AF0009B546 /* MovieCell.m in Sources */,
-				814F188719EE36460009B546 /* ViewController.m in Sources */,
 				814F188419EE36460009B546 /* AppDelegate.m in Sources */,
 				814F188119EE36460009B546 /* main.m in Sources */,
 			);
@@ -264,14 +254,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		814F188819EE36460009B546 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				814F188919EE36460009B546 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		814F188D19EE36460009B546 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -432,6 +414,7 @@
 				814F18A019EE36460009B546 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		814F18A119EE36460009B546 /* Build configuration list for PBXNativeTarget "rottentomatoTests" */ = {
 			isa = XCConfigurationList;
@@ -440,6 +423,7 @@
 				814F18A319EE36460009B546 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
