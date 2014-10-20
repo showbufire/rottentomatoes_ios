@@ -37,8 +37,8 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <items>
-                        <tabBarItem title="Box Office" id="Ylz-vA-MCJ"/>
-                        <tabBarItem title="DVD" id="klF-dk-nun"/>
+                        <tabBarItem title="" image="iconmonstr-video-3-icon-64" id="Ylz-vA-MCJ"/>
+                        <tabBarItem title="" image="iconmonstr-disc-14-icon-32" id="klF-dk-nun"/>
                     </items>
                 </tabBar>
                 <searchBar contentMode="redraw" placeholder="Search the movie" id="dQ1-xc-9HV">
@@ -51,6 +51,10 @@
             <point key="canvasLocation" x="140" y="154"/>
         </view>
     </objects>
+    <resources>
+        <image name="iconmonstr-disc-14-icon-32" width="32" height="32"/>
+        <image name="iconmonstr-video-3-icon-64" width="32" height="32"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
