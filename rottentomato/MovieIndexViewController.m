@@ -16,6 +16,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray *movies;
+@property (weak, nonatomic) IBOutlet UILabel *errorView;
 
 @end
 
@@ -27,7 +28,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    self.title = @"Rotten Tomatoes";
+    self.title = @"Movies";
     
     [self.tableView registerNib:[UINib nibWithNibName:@"MovieCell" bundle:nil] forCellReuseIdentifier:@"MovieCell"];
     [SVProgressHUD show];
@@ -40,11 +41,18 @@
     NSLog(@"%@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        // uncomment to simulate an network error
+        // error = [NSError alloc];
         
-        NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        self.movies = responseDictionary[@"movies"];
-        [self.tableView reloadData];
+        if (error == nil) {
+          NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+          self.movies = responseDictionary[@"movies"];
+          [self.tableView reloadData];
+        } else {
+          [self.errorView setHidden:NO];
+          [self.tableView setHidden:YES];
+        }
         [SVProgressHUD dismiss];
     }];
 }
