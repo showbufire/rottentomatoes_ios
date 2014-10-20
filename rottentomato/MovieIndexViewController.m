@@ -164,6 +164,7 @@
 
 - (void) tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     NSUInteger indexOfTab = [[tabBar items] indexOfObject:item];
+    self.searchBarView.text = @"";
     if (indexOfTab == 0) {
         [self makeBoxOfficeAPIRequest];
     } else {
