@@ -18,6 +18,7 @@
 @property (strong, nonatomic) NSArray *movies;
 @property (weak, nonatomic) IBOutlet UILabel *errorView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (weak, nonatomic) IBOutlet UITabBar *tabBarView;
 
 @end
 
@@ -26,17 +27,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
     
     self.title = @"Movies";
     
+    // init table view
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     [self.tableView registerNib:[UINib nibWithNibName:@"MovieCell" bundle:nil] forCellReuseIdentifier:@"MovieCell"];
-    [SVProgressHUD show];
     
-    [self makeAPICall];
+    // init tab view
+    self.tabBarView.delegate = self;
+    [self.tabBarView setSelectedItem:[[self.tabBarView items] objectAtIndex:0]];
+    
+    // init refresh control
     self.refreshControl = [self registerRefreshView];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
+    
+    // load data
+    [self makeBoxOfficeAPIRequest];
 }
 
 - (UIRefreshControl *) registerRefreshView {
@@ -46,34 +54,52 @@
     return refresh;
 }
 
-- (NSURL *) getRequestURL {
-    NSString *apiKey = @"yt2y9kbakprqz9ne9kumm47g";
-    NSString *urlString = [NSString stringWithFormat:@"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=%@", apiKey];
+- (NSString *) getAPIKey {
+    return @"yt2y9kbakprqz9ne9kumm47g";
+}
+
+- (NSURL *) getBoxOfficeURL {
+    NSString *urlString = [NSString stringWithFormat:@"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=%@", [self getAPIKey]];
+    return [NSURL URLWithString:urlString];
+}
+
+- (NSURL *) getDVDRequestURL {
+    NSString *urlString = [NSString stringWithFormat:@"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=%@", [self getAPIKey]];
     return [NSURL URLWithString:urlString];
 }
 
 - (void) onRefresh: (UIRefreshControl *)refresh {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(){
-      NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[self getRequestURL]];
-      [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-          // uncomment to simulate an network error
-          // error = [NSError alloc];
+
+        NSUInteger indexOfTab = [[self.tabBarView items] indexOfObject:[self.tabBarView selectedItem]];
+        NSURL *url = Nil;
+        if (indexOfTab == 0){
+            url = [self getBoxOfficeURL];
+        } else {
+            url = [self getDVDRequestURL];
+        }
+      
+        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+            // uncomment to simulate an network error
+            // error = [NSError alloc];
         
-          if (error == nil) {
-            NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            self.movies = responseDictionary[@"movies"];
-            [self.tableView reloadData];
-            [self.errorView setHidden:YES];
-          } else {
-            [self.errorView setHidden:NO];
-          }
-          [self.refreshControl endRefreshing];
+            if (error == nil) {
+                NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                self.movies = responseDictionary[@"movies"];
+                [self.tableView reloadData];
+                [self.errorView setHidden:YES];
+            } else {
+                [self.errorView setHidden:NO];
+            }
+            [self.refreshControl endRefreshing];
       }];
     });
 }
 
-- (void)makeAPICall {
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[self getRequestURL]];
+- (void)makeAPIRequest:(NSURL *) url {
+    [SVProgressHUD show];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
         // uncomment to simulate an network error
         // error = [NSError alloc];
@@ -88,6 +114,14 @@
         }
         [SVProgressHUD dismiss];
     }];
+}
+
+- (void)makeDVDAPIRequest {
+    [self makeAPIRequest:[self getDVDRequestURL]];
+}
+
+- (void)makeBoxOfficeAPIRequest {
+    [self makeAPIRequest:[self getBoxOfficeURL]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -119,6 +153,14 @@
     [self.navigationController pushViewController:dvc animated:YES];
 }
 
+- (void) tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    NSUInteger indexOfTab = [[tabBar items] indexOfObject:item];
+    if (indexOfTab == 0) {
+        [self makeBoxOfficeAPIRequest];
+    } else {
+        [self makeDVDAPIRequest];
+    }
+}
 
 /*
 #pragma mark - Navigation

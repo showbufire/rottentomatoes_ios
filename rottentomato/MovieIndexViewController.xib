@@ -7,6 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MovieIndexViewController">
             <connections>
                 <outlet property="errorView" destination="kk4-no-6cJ" id="o78-jW-Vh6"/>
+                <outlet property="tabBarView" destination="07c-g9-tZG" id="9Oa-MM-dSZ"/>
                 <outlet property="tableView" destination="Hyq-Kn-yGW" id="0Pw-wx-dVK"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -30,6 +31,15 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <tabBar contentMode="scaleToFill" id="07c-g9-tZG">
+                    <rect key="frame" x="0.0" y="519" width="320" height="49"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <items>
+                        <tabBarItem title="Box Office" id="Ylz-vA-MCJ"/>
+                        <tabBarItem title="DVD" id="klF-dk-nun"/>
+                    </items>
+                </tabBar>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <point key="canvasLocation" x="140" y="154"/>
