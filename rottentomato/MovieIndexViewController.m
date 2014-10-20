@@ -15,10 +15,14 @@
 @interface MovieIndexViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) NSArray *movies;
 @property (weak, nonatomic) IBOutlet UILabel *errorView;
-@property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (weak, nonatomic) IBOutlet UITabBar *tabBarView;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBarView;
+
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
+
+@property (strong, nonatomic) NSArray *movies;
+@property (strong, nonatomic) NSArray *shownMovies;
 
 @end
 
@@ -42,6 +46,9 @@
     // init refresh control
     self.refreshControl = [self registerRefreshView];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
+    
+    // init search bar
+    self.searchBarView.delegate = self;
     
     // load data
     [self makeBoxOfficeAPIRequest];
@@ -87,6 +94,7 @@
             if (error == nil) {
                 NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
                 self.movies = responseDictionary[@"movies"];
+                self.shownMovies = [self.movies copy];
                 [self.tableView reloadData];
                 [self.errorView setHidden:YES];
             } else {
@@ -107,6 +115,7 @@
         if (error == nil) {
           NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
           self.movies = responseDictionary[@"movies"];
+            self.shownMovies = [self.movies copy];
           [self.tableView reloadData];
           [self.errorView setHidden:YES];
         } else {
@@ -130,12 +139,12 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.movies count];
+    return [self.shownMovies count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MovieCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MovieCell"];
-    NSDictionary *movie = self.movies[indexPath.row];
+    NSDictionary *movie = self.shownMovies[indexPath.row];
     cell.titleLabel.text = movie[@"title"];
     cell.synoposisLabel.text = movie[@"synopsis"];
     NSString *thumbnailURL = [movie valueForKeyPath:@"posters.thumbnail"];
@@ -148,7 +157,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     MovieDetailsViewController *dvc = [[MovieDetailsViewController alloc] init];
-    dvc.movie = self.movies[indexPath.row];
+    dvc.movie = self.shownMovies[indexPath.row];
     
     [self.navigationController pushViewController:dvc animated:YES];
 }
@@ -160,6 +169,20 @@
     } else {
         [self makeDVDAPIRequest];
     }
+}
+
+- (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    if ([searchText compare:@""]) {
+        NSString *lowerSearchText = [searchText lowercaseString];
+        NSPredicate *containsSearchText = [NSPredicate predicateWithBlock:
+                                           ^BOOL(id evaluatedObject, NSDictionary *bindings) {
+                                               return [[evaluatedObject[@"title"] lowercaseString] containsString:lowerSearchText];
+                                           }];
+        self.shownMovies = [self.movies filteredArrayUsingPredicate:containsSearchText];
+    } else {
+        self.shownMovies = [self.movies copy];
+    }
+    [self.tableView reloadData];
 }
 
 /*
