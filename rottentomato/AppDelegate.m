@@ -9,10 +9,6 @@
 #import "AppDelegate.h"
 #import "MovieIndexViewController.h"
 
-@interface AppDelegate ()
-
-@end
-
 @implementation AppDelegate
 
 

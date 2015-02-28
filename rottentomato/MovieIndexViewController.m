@@ -8,9 +8,10 @@
 
 #import "MovieIndexViewController.h"
 #import "MovieCell.h"
-#import "UIImageView+AFNetworking.h"
 #import "MovieDetailsViewController.h"
 #import "SVProgressHUD.h"
+#import "Movie.h"
+#import "RottenTomatoesClient.h"
 
 @interface MovieIndexViewController ()
 
@@ -26,6 +27,9 @@
 
 @end
 
+const NSUInteger TopBoxOfficeTab = 0;
+const NSUInteger TopDVDRentalTab = 1;
+
 @implementation MovieIndexViewController
 
 - (void)viewDidLoad {
@@ -34,23 +38,18 @@
     
     self.title = @"Movies";
     
-    // init table view
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerNib:[UINib nibWithNibName:@"MovieCell" bundle:nil] forCellReuseIdentifier:@"MovieCell"];
     
-    // init tab view
     self.tabBarView.delegate = self;
     [self.tabBarView setSelectedItem:[[self.tabBarView items] objectAtIndex:0]];
     
-    // init refresh control
     self.refreshControl = [self registerRefreshView];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
     
-    // init search bar
     self.searchBarView.delegate = self;
     
-    // load data
     [self makeBoxOfficeAPIRequest];
 }
 
@@ -61,76 +60,39 @@
     return refresh;
 }
 
-- (NSString *) getAPIKey {
-    return @"yt2y9kbakprqz9ne9kumm47g";
-}
-
-- (NSURL *) getBoxOfficeURL {
-    NSString *urlString = [NSString stringWithFormat:@"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=%@", [self getAPIKey]];
-    return [NSURL URLWithString:urlString];
-}
-
-- (NSURL *) getDVDRequestURL {
-    NSString *urlString = [NSString stringWithFormat:@"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=%@", [self getAPIKey]];
-    return [NSURL URLWithString:urlString];
-}
-
 - (void) onRefresh: (UIRefreshControl *)refresh {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(){
 
         NSUInteger indexOfTab = [[self.tabBarView items] indexOfObject:[self.tabBarView selectedItem]];
-        NSURL *url = Nil;
-        if (indexOfTab == 0){
-            url = [self getBoxOfficeURL];
+        
+        if (indexOfTab == TopBoxOfficeTab) {
+            [[RottenTomatoesClient sharedInstance] getTopBoxOffice:^(NSArray *movies, NSError *error) {
+                if (error) {
+                    [self.errorView setHidden:NO];
+                } else {
+                    self.movies = movies;
+                    self.shownMovies = [self.movies copy];
+                    [self.tableView reloadData];
+                    [self.errorView setHidden:YES];
+                }
+                
+                [self.refreshControl endRefreshing];
+            }];
         } else {
-            url = [self getDVDRequestURL];
+            [[RottenTomatoesClient sharedInstance] getTopDVDRentals:^(NSArray *movies, NSError *error) {
+                if (error) {
+                    [self.errorView setHidden:NO];
+                } else {
+                    self.movies = movies;
+                    self.shownMovies = [self.movies copy];
+                    [self.tableView reloadData];
+                    [self.errorView setHidden:YES];
+                }
+                [self.refreshControl endRefreshing];
+            }];
         }
       
-        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-            // uncomment to simulate an network error
-            // error = [NSError alloc];
-        
-            if (error == nil) {
-                NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-                self.movies = responseDictionary[@"movies"];
-                self.shownMovies = [self.movies copy];
-                [self.tableView reloadData];
-                [self.errorView setHidden:YES];
-            } else {
-                [self.errorView setHidden:NO];
-            }
-            [self.refreshControl endRefreshing];
-      }];
     });
-}
-
-- (void)makeAPIRequest:(NSURL *) url {
-    [SVProgressHUD show];
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-        // uncomment to simulate an network error
-        // error = [NSError alloc];
-        
-        if (error == nil) {
-          NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-          self.movies = responseDictionary[@"movies"];
-            self.shownMovies = [self.movies copy];
-          [self.tableView reloadData];
-          [self.errorView setHidden:YES];
-        } else {
-          [self.errorView setHidden:NO];
-        }
-        [SVProgressHUD dismiss];
-    }];
-}
-
-- (void)makeDVDAPIRequest {
-    [self makeAPIRequest:[self getDVDRequestURL]];
-}
-
-- (void)makeBoxOfficeAPIRequest {
-    [self makeAPIRequest:[self getBoxOfficeURL]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -144,12 +106,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MovieCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MovieCell"];
-    NSDictionary *movie = self.shownMovies[indexPath.row];
-    cell.titleLabel.text = movie[@"title"];
-    cell.synoposisLabel.text = movie[@"synopsis"];
-    NSString *thumbnailURL = [movie valueForKeyPath:@"posters.thumbnail"];
-    [cell.imgView setImageWithURL:[NSURL URLWithString:thumbnailURL]];
-
+    if (!cell) {
+        cell = [[MovieCell alloc] init];
+    }
+    Movie *movie = self.shownMovies[indexPath.row];
+    [cell setMovie:movie];
     return cell;
 }
 
@@ -172,6 +133,38 @@
     }
 }
 
+- (void) makeBoxOfficeAPIRequest {
+    [SVProgressHUD show];
+    [[RottenTomatoesClient sharedInstance] getTopBoxOffice:^(NSArray *movies, NSError *error) {
+        if (error) {
+           [self.errorView setHidden:NO];
+        } else {
+            self.movies = movies;
+            self.shownMovies = [self.movies copy];
+            [self.tableView reloadData];
+            [self.errorView setHidden:YES];
+        }
+
+        [SVProgressHUD dismiss];
+    }];
+}
+
+- (void) makeDVDAPIRequest {
+    [SVProgressHUD show];
+    [[RottenTomatoesClient sharedInstance] getTopDVDRentals:^(NSArray *movies, NSError *error) {
+        if (error) {
+            [self.errorView setHidden:NO];
+        } else {
+            self.movies = movies;
+            self.shownMovies = [self.movies copy];
+            [self.tableView reloadData];
+            [self.errorView setHidden:YES];
+        }
+        
+        [SVProgressHUD dismiss];
+    }];
+}
+
 - (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     if ([searchText compare:@""]) {
         NSString *lowerSearchText = [searchText lowercaseString];
@@ -186,14 +179,6 @@
     [self.tableView reloadData];
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -24,16 +24,14 @@
     [super viewDidLoad];
     
     // Do any additional setup after loading the view from its nib.
-    self.titleView.text = self.movie[@"title"];
-    self.title = self.movie[@"title"];
-    self.synopsisView.text = self.movie[@"synopsis"];
+    self.titleView.text = self.movie.title;
+    self.synopsisView.text = self.movie.synopsis;
     NSString *highResPosterURL = [self getHighResPosterURL];
     [self.posterView setImageWithURL:[NSURL URLWithString:highResPosterURL]];
 }
 
 - (NSString *) getHighResPosterURL{
-    NSString *tmbURL = [self.movie valueForKeyPath:@"posters.thumbnail"];
-    return [tmbURL stringByReplacingOccurrencesOfString:@"_tmb" withString:@"_hud"];
+    return [[self.movie.thumbnail absoluteString] stringByReplacingOccurrencesOfString:@"_tmb" withString:@"_hud"];
 }
 
 - (void)didReceiveMemoryWarning {
