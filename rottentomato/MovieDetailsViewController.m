@@ -12,9 +12,9 @@
 @interface MovieDetailsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *posterView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UILabel *synopsisView;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UITextView *synopsisView;
 
-- (NSString *) getHighResPosterURL;
 
 @end
 
@@ -25,13 +25,9 @@
     
     // Do any additional setup after loading the view from its nib.
     self.titleView.text = self.movie.title;
+    self.scrollView.contentSize = CGSizeMake(self.titleView.frame.size.width, 300);
     self.synopsisView.text = self.movie.synopsis;
-    NSString *highResPosterURL = [self getHighResPosterURL];
-    [self.posterView setImageWithURL:[NSURL URLWithString:highResPosterURL]];
-}
-
-- (NSString *) getHighResPosterURL{
-    return [[self.movie.thumbnail absoluteString] stringByReplacingOccurrencesOfString:@"_tmb" withString:@"_hud"];
+    [self.posterView setImageWithURL:self.movie.thumbnail];
 }
 
 - (void)didReceiveMemoryWarning {
