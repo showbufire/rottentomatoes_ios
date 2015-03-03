@@ -155,7 +155,8 @@ const NSUInteger TopDVDRentalTab = 1;
         NSString *lowerSearchText = [searchText lowercaseString];
         NSPredicate *containsSearchText = [NSPredicate predicateWithBlock:
                                            ^BOOL(id evaluatedObject, NSDictionary *bindings) {
-                                               return [[evaluatedObject[@"title"] lowercaseString] containsString:lowerSearchText];
+                                               Movie *movie = evaluatedObject;
+                                               return [[movie.title lowercaseString] containsString:lowerSearchText];
                                            }];
         self.shownMovies = [self.movies filteredArrayUsingPredicate:containsSearchText];
     } else {
