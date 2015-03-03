@@ -60,38 +60,31 @@ const NSUInteger TopDVDRentalTab = 1;
     return refresh;
 }
 
+- (void (^)(NSArray *movies, NSError *error)) onRefreshCompletion {
+    return ^void(NSArray *movies, NSError *error) {
+        if (error) {
+            [self.errorView setHidden:NO];
+        } else {
+            self.movies = movies;
+            self.shownMovies = [self.movies copy];
+            [self.tableView reloadData];
+            [self.errorView setHidden:YES];
+        }
+        
+        [self.refreshControl endRefreshing];
+    };
+}
+
 - (void) onRefresh: (UIRefreshControl *)refresh {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(){
 
         NSUInteger indexOfTab = [[self.tabBarView items] indexOfObject:[self.tabBarView selectedItem]];
         
         if (indexOfTab == TopBoxOfficeTab) {
-            [[RottenTomatoesClient sharedInstance] getTopBoxOffice:^(NSArray *movies, NSError *error) {
-                if (error) {
-                    [self.errorView setHidden:NO];
-                } else {
-                    self.movies = movies;
-                    self.shownMovies = [self.movies copy];
-                    [self.tableView reloadData];
-                    [self.errorView setHidden:YES];
-                }
-                
-                [self.refreshControl endRefreshing];
-            }];
+            [[RottenTomatoesClient sharedInstance] getTopBoxOffice:[self onRefreshCompletion]];
         } else {
-            [[RottenTomatoesClient sharedInstance] getTopDVDRentals:^(NSArray *movies, NSError *error) {
-                if (error) {
-                    [self.errorView setHidden:NO];
-                } else {
-                    self.movies = movies;
-                    self.shownMovies = [self.movies copy];
-                    [self.tableView reloadData];
-                    [self.errorView setHidden:YES];
-                }
-                [self.refreshControl endRefreshing];
-            }];
+            [[RottenTomatoesClient sharedInstance] getTopDVDRentals:[self onRefreshCompletion]];
         }
-      
     });
 }
 
@@ -133,25 +126,8 @@ const NSUInteger TopDVDRentalTab = 1;
     }
 }
 
-- (void) makeBoxOfficeAPIRequest {
-    [SVProgressHUD show];
-    [[RottenTomatoesClient sharedInstance] getTopBoxOffice:^(NSArray *movies, NSError *error) {
-        if (error) {
-           [self.errorView setHidden:NO];
-        } else {
-            self.movies = movies;
-            self.shownMovies = [self.movies copy];
-            [self.tableView reloadData];
-            [self.errorView setHidden:YES];
-        }
-
-        [SVProgressHUD dismiss];
-    }];
-}
-
-- (void) makeDVDAPIRequest {
-    [SVProgressHUD show];
-    [[RottenTomatoesClient sharedInstance] getTopDVDRentals:^(NSArray *movies, NSError *error) {
+- (void (^)(NSArray *movies, NSError *error)) onAPIRequestCompletion {
+    return ^void(NSArray *movies, NSError *error) {
         if (error) {
             [self.errorView setHidden:NO];
         } else {
@@ -160,9 +136,18 @@ const NSUInteger TopDVDRentalTab = 1;
             [self.tableView reloadData];
             [self.errorView setHidden:YES];
         }
-        
         [SVProgressHUD dismiss];
-    }];
+    };
+}
+
+- (void) makeBoxOfficeAPIRequest {
+    [SVProgressHUD show];
+    [[RottenTomatoesClient sharedInstance] getTopBoxOffice:[self onAPIRequestCompletion]];
+}
+
+- (void) makeDVDAPIRequest {
+    [SVProgressHUD show];
+    [[RottenTomatoesClient sharedInstance] getTopDVDRentals:[self onAPIRequestCompletion]];
 }
 
 - (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
