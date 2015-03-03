@@ -49,6 +49,7 @@ const NSUInteger TopDVDRentalTab = 1;
     [self.tableView insertSubview:self.refreshControl atIndex:0];
     
     self.searchBarView.delegate = self;
+    self.searchBarView.showsCancelButton = YES;
     
     [self makeBoxOfficeAPIRequest];
 }
@@ -165,6 +166,15 @@ const NSUInteger TopDVDRentalTab = 1;
     [self.tableView reloadData];
 }
 
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+}
 
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    searchBar.text = @"";
+    self.shownMovies = [self.movies copy];
+    [self.tableView reloadData];
+    [searchBar resignFirstResponder];
+}
 
 @end
